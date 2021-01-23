@@ -1,1 +1,1 @@
-/bin/bash ftpsync/bin/ftpsync sync:all 
+/bin/bash /opt/Juanbanpar/ftpsync/bin/ftpsync sync:all
