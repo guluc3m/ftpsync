@@ -1,2 +1,3 @@
-00 02 * * * archvsync /script.sh
+#m h  d m y
+00 01 * * * archvsync /opt/guluc3m/ftpsync/script.sh >> /var/log/cron.log 2>&1
 #Una linea de regalo para que funcione

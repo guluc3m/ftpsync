@@ -1,5 +1,5 @@
 server {
-  server_name ftp.gul.es;
+  server_name ftp.gul.es ftp.gul.uc3m.es;
 
   root /var/www/mirrors;
   

@@ -6,11 +6,12 @@ RUN apt-get update && apt-get install -y \
     cron \
     rsync \
     nginx
-    #apache2
+
+RUN mkdir -p /opt/guluc3m/
 
 RUN adduser \
     --system \
-    --home=/opt/Juanbanpar/ \
+    --home=/opt/guluc3m/ \
     --shell=/bin/bash \
     --no-create-home \
     --group \
@@ -21,30 +22,26 @@ RUN chown -R archvsync: /srv/mirrors
 VOLUME ["/srv/mirrors"]
 
 RUN ln -s /srv/mirrors /var/www/mirrors
-#RUN mv /etc/apache2/sites-available/000-default.conf /etc/apache2/sites-available/000-default.backup
-#ADD 000-default.conf /etc/apache2/sites-available/000-default.conf
-#RUN echo "ServerName gul.es" | tee /etc/apache2/conf-available/fqdn.conf
-#RUN a2enconf fqdn
-#RUN apache2ctl configtest
 ADD ftp.gul.es /etc/nginx/sites-available/ftp.gul.es
 RUN ln -s /etc/nginx/sites-available/ftp.gul.es /etc/nginx/sites-enabled/ftp.gul.es
 RUN rm /etc/nginx/sites-available/default
 RUN rm /etc/nginx/sites-enabled/default
 RUN service nginx start
 
-RUN mkdir -p /opt/Juanbanpar/
-WORKDIR /opt/Juanbanpar/
-RUN git clone https://github.com/Juanbanpar/ftpsync.git
+WORKDIR /opt/guluc3m/
+RUN git clone https://github.com/guluc3m/ftpsync.git
 RUN chown -R archvsync:archvsync ./ftpsync
-WORKDIR /opt/Juanbanpar/ftpsync/bin/
+WORKDIR /opt/guluc3m/ftpsync/bin/
 RUN chmod +x ./ftpsync
 
-ADD crontab /etc/cron.d/simple-cron
-RUN chmod 0644 /etc/cron.d/simple-cron
-ADD script.sh /script.sh
-RUN chmod +x /script.sh
+ADD crontab /etc/cron.d/mirror-cron
+RUN chmod 0644 /etc/cron.d/mirror-cron
+RUN crontab /etc/cron.d/mirror-cron
+RUN touch /var/log/cron.log
+RUN chown archvsync:archvsync /var/log/cron.log
 
-#ENV PATH /opt/Juanbanpar/ftpsync/bin:${PATH}
+CMD cron && tail -f /var/log/cron.log
+#ENV PATH /opt/guluc3m/ftpsync/bin:${PATH}
 
 #CMD cron
 #CMD [cron && service nginx restart && "/bin/su -c "/bin/bash ftpsync/bin/ftpsync sync:all" - archvsync"]
