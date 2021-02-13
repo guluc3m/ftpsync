@@ -26,7 +26,9 @@ ADD ftp.gul.es /etc/nginx/sites-available/ftp.gul.es
 RUN ln -s /etc/nginx/sites-available/ftp.gul.es /etc/nginx/sites-enabled/ftp.gul.es
 RUN rm /etc/nginx/sites-available/default
 RUN rm /etc/nginx/sites-enabled/default
-RUN service nginx start
+# Inicia Nginx
+STOPSIGNAL SIGTERM
+CMD ["nginx", "-g", "daemon off;"]
 
 WORKDIR /opt/guluc3m/
 RUN git clone https://github.com/guluc3m/ftpsync.git
