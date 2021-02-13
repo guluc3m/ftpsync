@@ -1,7 +1,7 @@
 server {
   server_name ftp.gul.es ftp.gul.uc3m.es;
 
-  root /var/www/mirrors;
+  root /var/www/mirrors/debian;
   
   autoindex on;
   sendfile on;
